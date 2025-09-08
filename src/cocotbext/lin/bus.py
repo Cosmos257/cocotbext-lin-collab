@@ -1,21 +1,10 @@
-"""Bus creator."""
-import cocotb
-from cocotb_bus import Bus
-
-
-class LinBus(Bus):
-      """For most cases the defaault bus creator in cocotb_bus is ok. Some protocols have edge cases that need to be handled here.
-
-      1. Multiple names for the same signal. e.g. RDY vs not_busy
-      2. relationship between signals that need to be checked e.g. byte_enable == width_of(data)/8
-      3. Depending on version/profile have different lists of signals.
-      """
-      _signals:list[str]=[]
-      def __init__(self, dut, prefix,
-                   bus_separator="_", case_insensitive=False,
-                   array_idx=None):
-          super().__init__(entity=dut,
-                           name=prefix,signals=_signals,optional_signals=[],
-                           bus_separator=bus_separator,
-                           case_insensitive=case_insensitive,
-                           array_idx=array_idx)
+class LinBus:
+    def __init__(self, dut):
+        self.clk = dut.sys_clk
+        self.rstn = dut.rstn
+        self.pid = dut.pid
+        self.data = dut.data
+        self.comm_tx_done = dut.comm_tx_done
+        self.resp_tx_done = dut.resp_tx_done
+        self.frame_header_out = dut.frame_header_out
+        self.response_out = dut.response_out
