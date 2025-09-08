@@ -1,21 +1,18 @@
-from .config import default_config
+import random
+from cocotb.triggers import RisingEdge
+
+
 class LinDriver:
+    def __init__(self, dut, clock):
+        self.dut = dut
+        self.clock = clock
 
-        def __init__(self,bus,config=default_config,name=None):
-               self.bus=bus
-               self.config=config
-               pass
+    async def send(self, pid, data_bytes):
+        # Pad to 8 bytes
+        padded_data = data_bytes + [0] * (8 - len(data_bytes))
+        self.dut.pid.value = pid
+        self.dut.data.value = int.from_bytes(bytes(padded_data), "little")
+        await RisingEdge(self.clock)
+        return padded_data
 
-        async def write(self,address:int, data:bytes):
-                pass
-
-        async def read(self,address:int,numBytes:int):
-                pass
-
-        async def _txrx(self):
-                pass
-
-        def add_callback(self, compare_fn):
-                """Callback into scoreboard."""
-                pass
 
