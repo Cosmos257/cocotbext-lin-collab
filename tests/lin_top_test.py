@@ -4,12 +4,12 @@ from cocotb.triggers import Timer, RisingEdge, ReadOnly
 import random
 from cocotb_coverage.coverage import coverage_db
 
-from lin.driver import LinDriver
-from lin.monitor import LinMonitor
-from lin.scoreboard import LinScoreboard
-import lin.utils as utils
+from cocotbext.lin.driver import LinDriver
+from cocotbext.lin.monitor import LinMonitor
+from cocotbext.lin.scoreboard import LinScoreboard
+import cocotbext.lin.utils as utils
 
-from lin.coverage import cover_pid, cover_data_byte, cover_data_len, protocol_cover
+from cocotbext.lin.coverage import cover_pid, cover_data_byte, cover_data_len, protocol_cover
 
 
 @cocotb.test()
