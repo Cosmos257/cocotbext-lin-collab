@@ -5,7 +5,7 @@ from cocotb.triggers import Timer
 from cocotb_coverage.coverage import coverage_db
 import os
 
-from cocotbext.lin.bus import LinTransaction
+from cocotbext.lin.bus import LinBus
 from cocotbext.lin.driver import LinDriver
 from cocotbext.lin.monitor import protocol_monitor
 from cocotbext.lin.scoreboard import LinScoreboard
@@ -27,7 +27,7 @@ async def lin_top_test(dut):
     for i in range(30):
         pid = random_pid()
         length, data_bytes = random_data()
-        txn = LinTransaction(pid, data_bytes)
+        txn = LinBus(pid, data_bytes)
 
         await driver.send(txn)
         await scoreboard.check(txn, i+1)
