@@ -7,7 +7,7 @@ import os
 
 from cocotbext.lin.bus import LinBus
 from cocotbext.lin.driver import LinDriver
-from cocotbext.lin.monitor import protocol_monitor
+from cocotbext.lin.monitor import LinMonitor
 from cocotbext.lin.scoreboard import LinScoreboard
 from cocotbext.lin.config import random_pid, random_data
 
@@ -20,7 +20,7 @@ async def lin_top_test(dut):
     await Timer(1, "ns")
     dut.rstn.value = 1
 
-    cocotb.start_soon(protocol_monitor(dut))
+    cocotb.start_soon(LinMonitor(dut))
     driver = LinDriver(dut)
     scoreboard = LinScoreboard(dut)
 
