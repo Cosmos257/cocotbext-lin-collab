@@ -5,11 +5,11 @@ from cocotb.triggers import Timer
 from cocotb_coverage.coverage import coverage_db
 import os
 
-from bus import LinTransaction
-from driver import LinDriver
-from monitor import protocol_monitor
-from scoreboard import LinScoreboard
-from config import random_pid, random_data
+from cocotbext.lin.bus import LinTransaction
+from cocotbext.lin.driver import LinDriver
+from cocotbext.lin.monitor import protocol_monitor
+from cocotbext.lin.scoreboard import LinScoreboard
+from cocotbext.lin.config import random_pid, random_data
 
 
 @cocotb.test()
