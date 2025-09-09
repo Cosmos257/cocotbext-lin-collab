@@ -20,7 +20,7 @@ async def lin_top_test(dut):
     await Timer(1, "ns")
     dut.rstn.value = 1
 
-    cocotb.start_soon(LinMonitor(dut))
+    LinMonitor(dut)
     driver = LinDriver(dut)
     scoreboard = LinScoreboard(dut)
 
