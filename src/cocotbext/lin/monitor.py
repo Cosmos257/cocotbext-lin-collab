@@ -1,30 +1,27 @@
-from cocotb.triggers import RisingEdge, FallingEdge
+import cocotb
+from cocotb.triggers import RisingEdge, FallingEdge, ReadOnly
+from cocotb_coverage.coverage import CoverPoint, CoverCross
+
+@CoverPoint("top.prot.lin.current",  xf=lambda t: t["current"],  bins=["Idle","HeaderTx","ResponseTx"])
+@CoverPoint("top.prot.lin.previous", xf=lambda t: t["previous"], bins=["Idle","HeaderTx","ResponseTx"])
+@CoverCross("top.prot.lin.cross", items=["top.prot.lin.previous","top.prot.lin.current"])
+def protocol_cover(t): pass
 
 
-class LinMonitor:
-    def __init__(self, dut, callback=None):
-        self.dut = dut
-        self.callback = callback
-        self.prev = "Idle"
+async def protocol_monitor(dut):
+    prev = "Idle"
+    while int(dut.rstn.value) == 0:
+        await RisingEdge(dut.sys_clk)
 
-    async def run(self):
-        while int(self.dut.rstn.value) == 0:
-            await RisingEdge(self.dut.sys_clk)
-        while True:
-            # Header
-            await RisingEdge(self.dut.comm_tx_done)
-            self._notify("HeaderTx")
+    while True:
+        await RisingEdge(dut.comm_tx_done)
+        protocol_cover({"previous": prev, "current": "HeaderTx"})
+        prev = "HeaderTx"
 
-            # Response
-            await RisingEdge(self.dut.resp_tx_done)
-            self._notify("ResponseTx")
+        await RisingEdge(dut.resp_tx_done)
+        protocol_cover({"previous": prev, "current": "ResponseTx"})
+        prev = "ResponseTx"
 
-            # Back to Idle
-            await FallingEdge(self.dut.resp_tx_done)
-            self._notify("Idle")
-
-    def _notify(self, state):
-        if self.callback:
-            txn = {"previous": self.prev, "current": state}
-            self.callback(txn)
-        self.prev = state
+        await FallingEdge(dut.resp_tx_done)
+        protocol_cover({"previous": prev, "current": "Idle"})
+        prev = "Idle"
