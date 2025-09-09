@@ -18,6 +18,7 @@ async def lin_top_test(dut):
     await Timer(1, "ns")
     dut.rstn.value = 0
     await Timer(1, "ns")
+    await RisingEdge(dut.sys_clk) 
     dut.rstn.value = 1
 
     LinMonitor(dut)
