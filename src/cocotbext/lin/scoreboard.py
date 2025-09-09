@@ -1,4 +1,4 @@
-from utils import build_expected_header, build_expected_response
+from .utils import build_expected_header, build_expected_response
 from cocotb.triggers import RisingEdge, ReadOnly
 
 class LinScoreboard:
